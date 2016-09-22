@@ -1,5 +1,8 @@
 const readline=require('readline');
 const fs=require('fs');
+var country={};
+var name=[];
+var life=[];
 var result=[];
 var tempArray = [];
 var header=1;
@@ -8,18 +11,27 @@ const rl=readline.createInterface({
 });
 rl.on('line',(line)=>{
   if(header==1){
+		var commaRemovedLine = line.replace(/"[^"]+"/g, function (match) {return match.replace(/,/g, '');});
+    var res=commaRemovedLine.split(",");
+    for(var i=0;i<res.length;i++){
+      if(res[i]=="CountryName"){
+        cindex=i;
+      }
+      else if (res[i]=="IndicatorCode") {
+          iindex=i;
+      }
+      else if (res[i]=="Value") {
+          vindex=i;
+      }
+    }
     header=0;
   }
   else {
     var commaRemovedLine = line.replace(/"[^"]+"/g, function (match) {return match.replace(/,/g, '');});
     var res=commaRemovedLine.split(",");
-    var countryName1=res[0];
-		//countryName1=countryName1.replace(/"/g,'');
-    var countryCode1=res[1];
-    var indicatorName1=res[2];
-    var indicatorCode1=res[3];
-    var year1=res[4];
-    var value1=res[5];
+    var countryName1=res[cindex];
+    var indicatorCode1=res[iindex];
+    var value1=res[vindex];
 		countryName1=countryName1.replace(/"/g,'');
     if((tempArray.indexOf(countryName1)<0) &&(indicatorCode1=="SP.DYN.LE00.IN")){
 			var obj={};
